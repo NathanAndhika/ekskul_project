@@ -2,58 +2,85 @@
 
 @section('content')
 
-<h1 class="text-2xl font-bold mb-4">Tambah Barang</h1>
-
-<form action="{{ route('products.store') }}" method="POST" class="bg-white p-6 rounded shadow max-w-md">
-    @csrf
-
-    <div class="mb-4">
-        <label for="category_id" class="block text-gray-700 font-bold mb-2">Kategori</label>
-        <select name="category_id" id="category_id" class="w-full border p-2 rounded @error('category_id') border-red-500 @enderror">
-            <option value="">Pilih Kategori</option>
-            @foreach($categories as $category)
-                <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
-                    {{ $category->name }}
-                </option>
-            @endforeach
-        </select>
-        @error('category_id')
-            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-        @enderror
+<div class="max-w-2xl mx-auto">
+    <div class="flex items-center gap-4 mb-8">
+        <a href="{{ route('products.index') }}" class="bg-indigo-50 hover:bg-indigo-100 text-indigo-600 p-2 rounded-full transition-colors">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+        </a>
+        <h1 class="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-700 to-purple-700 tracking-tight">
+            Tambah Barang
+        </h1>
     </div>
 
-    <div class="mb-4">
-        <label for="name" class="block text-gray-700 font-bold mb-2">Nama Barang</label>
-        <input type="text" name="name" id="name" value="{{ old('name') }}"
-               class="w-full border p-2 rounded @error('name') border-red-500 @enderror">
-        @error('name')
-            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-        @enderror
-    </div>
+    <div class="bg-white p-8 rounded-3xl shadow-xl shadow-indigo-100/50 border border-gray-100">
+        <form action="{{ route('products.store') }}" method="POST">
+            @csrf
 
-    <div class="mb-4">
-        <label for="price" class="block text-gray-700 font-bold mb-2">Harga</label>
-        <input type="number" name="price" id="price" value="{{ old('price') }}"
-               class="w-full border p-2 rounded @error('price') border-red-500 @enderror">
-        @error('price')
-            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-        @enderror
-    </div>
+            <div class="mb-5">
+                <label for="category_id" class="block text-gray-700 font-semibold mb-2">Kategori</label>
+                <div class="relative">
+                    <select name="category_id" id="category_id" class="w-full bg-gray-50 border border-gray-200 text-gray-900 rounded-xl focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 block p-3.5 appearance-none transition-all @error('category_id') border-red-500 bg-red-50 @enderror">
+                        <option value="">Pilih Kategori</option>
+                        @foreach($categories as $category)
+                            <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
+                                {{ $category->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-500">
+                        <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                    </div>
+                </div>
+                @error('category_id')
+                    <p class="text-red-500 text-sm mt-2 flex items-center gap-1"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> {{ $message }}</p>
+                @enderror
+            </div>
 
-    <div class="mb-4">
-        <label for="stock" class="block text-gray-700 font-bold mb-2">Stok</label>
-        <input type="number" name="stock" id="stock" value="{{ old('stock') }}"
-               class="w-full border p-2 rounded @error('stock') border-red-500 @enderror">
-        @error('stock')
-            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-        @enderror
-    </div>
+            <div class="mb-5">
+                <label for="name" class="block text-gray-700 font-semibold mb-2">Nama Barang</label>
+                <input type="text" name="name" id="name" value="{{ old('name') }}" placeholder="Contoh: Laptop Asus..."
+                       class="w-full bg-gray-50 border border-gray-200 text-gray-900 rounded-xl focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 block p-3.5 transition-all @error('name') border-red-500 bg-red-50 @enderror">
+                @error('name')
+                    <p class="text-red-500 text-sm mt-2 flex items-center gap-1"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> {{ $message }}</p>
+                @enderror
+            </div>
 
-    <div class="flex gap-2">
-        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Simpan</button>
-        <a href="{{ route('products.index') }}" class="bg-gray-500 text-white px-4 py-2 rounded">Batal</a>
-    </div>
+            <div class="mb-5 grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <div>
+                    <label for="price" class="block text-gray-700 font-semibold mb-2">Harga (Rp)</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                            <span class="text-gray-500 font-medium">Rp</span>
+                        </div>
+                        <input type="number" name="price" id="price" value="{{ old('price') }}" placeholder="0"
+                               class="w-full bg-gray-50 border border-gray-200 text-gray-900 rounded-xl focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 block pl-12 p-3.5 transition-all @error('price') border-red-500 bg-red-50 @enderror">
+                    </div>
+                    @error('price')
+                        <p class="text-red-500 text-sm mt-2 flex items-center gap-1"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> {{ $message }}</p>
+                    @enderror
+                </div>
 
-</form>
+                <div>
+                    <label for="stock" class="block text-gray-700 font-semibold mb-2">Stok Tersedia</label>
+                    <input type="number" name="stock" id="stock" value="{{ old('stock') }}" placeholder="0"
+                           class="w-full bg-gray-50 border border-gray-200 text-gray-900 rounded-xl focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 block p-3.5 transition-all @error('stock') border-red-500 bg-red-50 @enderror">
+                    @error('stock')
+                        <p class="text-red-500 text-sm mt-2 flex items-center gap-1"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> {{ $message }}</p>
+                    @enderror
+                </div>
+            </div>
+
+            <div class="flex gap-3 pt-6 border-t border-gray-100 mt-2">
+                <button type="submit" class="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold px-6 py-3 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 w-full sm:w-auto">
+                    Simpan Barang
+                </button>
+                <a href="{{ route('products.index') }}" class="bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold px-6 py-3 rounded-xl transition-all duration-300 w-full sm:w-auto text-center">
+                    Batal
+                </a>
+            </div>
+
+        </form>
+    </div>
+</div>
 
 @endsection
